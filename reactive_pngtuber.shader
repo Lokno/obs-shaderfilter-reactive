@@ -30,7 +30,7 @@ uniform bool swap_on_talk<
 > = false;
 
 uniform bool squish<
-    string label = "Use Talk Texture";
+    string label = "Squish?";
     string widget_type = "check";
 > = false;
 
@@ -40,7 +40,7 @@ uniform float amount<
     float minimum = 0.0;
     float maximum = 1.0;
     float step = 0.01;
-> = 0.4;
+> = 0.1;
 
 uniform texture2d talk_texture;
 
@@ -51,7 +51,7 @@ float4 mainImage(VertData v_in) : TARGET
     float4 col;
     float2 uv = v_in.uv;
 
-    if( squish )
+    if( squish && audio_magnitude >= threshold )
     {
         float curr_bounce = audio_magnitude*amount;
         float y = (uv.y-curr_bounce)*(1.0/(1.0-curr_bounce));
@@ -60,18 +60,18 @@ float4 mainImage(VertData v_in) : TARGET
 
     if( audio_magnitude < threshold )
     {
-        col = image.Sample(textureSampler, v_in.uv);
+        col = image.Sample(textureSampler, uv);
         col = float4(col.rgb*min_intensity, col.a);
     }
     else if( audio_magnitude > full_threshold )
     {
         if( swap_on_talk )
         {
-            col = talk_texture.Sample(textureSampler, v_in.uv);
+            col = talk_texture.Sample(textureSampler, uv);
         }
         else
         {
-            col = image.Sample(textureSampler, v_in.uv);
+            col = image.Sample(textureSampler, uv);
         }
         
     }
@@ -81,11 +81,11 @@ float4 mainImage(VertData v_in) : TARGET
 
         if( swap_on_talk )
         {
-            col = lerp(image.Sample(textureSampler, v_in.uv),talk_texture.Sample(textureSampler, v_in.uv),I);
+            col = lerp(image.Sample(textureSampler, uv),talk_texture.Sample(textureSampler, uv),I);
         }
         else
         {
-             col = image.Sample(textureSampler, v_in.uv);
+             col = image.Sample(textureSampler, uv);
         }
         
         col = float4(col.rgb*I, col.a);
