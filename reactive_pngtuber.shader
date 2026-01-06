@@ -29,6 +29,27 @@ uniform bool swap_on_talk<
     string widget_type = "check";
 > = false;
 
+uniform bool blink<
+    string label = "Blink?";
+    string widget_type = "check";
+> = false;
+
+uniform float blink_freq<
+    string label = "Blink Frequency";
+    string widget_type = "slider";
+    float minimum = 0.0;
+    float maximum = 30.0;
+    float step = 1.0;
+> = 9.0;
+
+uniform float blink_dur<
+    string label = "Blink Duration";
+    string widget_type = "slider";
+    float minimum = 0.0;
+    float maximum = 5.0;
+    float step = 0.01;
+> = 0.09;
+
 uniform bool squish<
     string label = "Squish?";
     string widget_type = "check";
@@ -42,7 +63,12 @@ uniform float amount<
     float step = 0.01;
 > = 0.1;
 
+uniform texture2d blink_texture;
 uniform texture2d talk_texture;
+
+float rand(float2 co){
+  return frac(sin(dot(co.xy,float2(12.9898,78.233))) * 43758.5453);
+}
 
 float4 mainImage(VertData v_in) : TARGET
 {
@@ -50,6 +76,7 @@ float4 mainImage(VertData v_in) : TARGET
 
     float4 col;
     float2 uv = v_in.uv;
+    float4 baseCol;
 
     if( squish && audio_magnitude >= threshold )
     {
@@ -58,10 +85,20 @@ float4 mainImage(VertData v_in) : TARGET
         uv = float2(uv.x,y);
     }
 
+    float blink_offset = rand(float2(floor(elapsed_time_active/blink_freq),1.0));
+
+    if( blink && fmod(elapsed_time_active+blink_offset,blink_freq) < (blink_dur) )
+    {
+        baseCol = blink_texture.Sample(textureSampler, uv);
+    }
+    else
+    {
+        baseCol = image.Sample(textureSampler, uv);
+    }
+
     if( audio_magnitude < threshold )
     {
-        col = image.Sample(textureSampler, uv);
-        col = float4(col.rgb*min_intensity, col.a);
+        col = float4(baseCol.rgb*min_intensity, baseCol.a);
     }
     else if( audio_magnitude > full_threshold )
     {
@@ -81,11 +118,11 @@ float4 mainImage(VertData v_in) : TARGET
 
         if( swap_on_talk )
         {
-            col = lerp(image.Sample(textureSampler, uv),talk_texture.Sample(textureSampler, uv),I);
+            col = lerp(baseCol,talk_texture.Sample(textureSampler, uv),I);
         }
         else
         {
-             col = image.Sample(textureSampler, uv);
+             col = baseCol;
         }
         
         col = float4(col.rgb*I, col.a);
