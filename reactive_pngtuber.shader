@@ -14,7 +14,7 @@ uniform float full_threshold<
     float minimum = 0.0;
     float maximum = 1.0;
     float step = 0.01;
-> = 0.3;
+> = 0.2;
 
 uniform float min_intensity<
     string label = "Inactive Minimum Intensity";
@@ -22,10 +22,10 @@ uniform float min_intensity<
     float minimum = 0.0;
     float maximum = 1.0;
     float step = 0.01;
-> = 0.3;
+> = 0.5;
 
 uniform bool swap_on_talk<
-    string label = "Swap to Talk Image/Source";
+    string label = "Swap to Talk Texture";
     string widget_type = "check";
 > = false;
 
@@ -46,7 +46,7 @@ uniform float blink_dur<
     string label = "Blink Duration";
     string widget_type = "slider";
     float minimum = 0.0;
-    float maximum = 5.0;
+    float maximum = 1.0;
     float step = 0.01;
 > = 0.09;
 
