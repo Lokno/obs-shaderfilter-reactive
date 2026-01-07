@@ -47,5 +47,9 @@ blink texture - obs source or image file to use for the blink texture
 
 talk texture - obs source or image file to user for the talk texture
 
+## Free to Use
+
+Please credit me and if possible link back to the github.
+
 ## Future Features
 - Add Scream Source
