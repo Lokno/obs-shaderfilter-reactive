@@ -81,7 +81,7 @@ uniform texture2d talk_texture;
 uniform texture2d scream_texture;
 
 float rand(float2 co){
-  return frac(sin(dot(co.xy,float2(12.9898,78.233))) * 43758.5453);
+    return frac(sin(dot(co.xy,float2(12.9898,78.233))) * 43758.5453);
 }
 
 float4 mainImage(VertData v_in) : TARGET
@@ -143,7 +143,7 @@ float4 mainImage(VertData v_in) : TARGET
         }
         else
         {
-             col = baseCol;
+            col = baseCol;
         }
         
         col = float4(col.rgb*I, col.a);

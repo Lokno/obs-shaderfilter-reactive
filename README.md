@@ -10,7 +10,7 @@ Creates a PNGTuber on an image source in OBS Studio using obs-shaderfilter
 
 ## How to use
 - Install obs-shaderfilter 2.6.0+ (https://github.com/exeldro/obs-shaderfilter/releases)
-- Download this entire git repo or just the file named `reactive_pngtuber.shader`
+- Download the file named `reactive_pngtuber.shader`
 - Add a source to your scene to serve as the idle state
 - Right-click source and select "Filters"
 - Click the plus sign (+) and select "User-defined shader" (requires obs-shaderfilter)
