@@ -17,7 +17,7 @@ uniform float full_threshold<
 > = 0.2;
 
 uniform float min_intensity<
-    string label = "Inactive Minimum Intensity";
+    string label = "Inactive Brightness";
     string widget_type = "slider";
     float minimum = 0.0;
     float maximum = 1.0;
@@ -56,15 +56,29 @@ uniform bool squish<
 > = false;
 
 uniform float amount<
-    string label = "Maximum Squish Height";
+    string label = "Maximum Squish Amount";
     string widget_type = "slider";
     float minimum = 0.0;
     float maximum = 1.0;
     float step = 0.01;
 > = 0.1;
 
+uniform bool swap_on_scream<
+    string label = "Swap to Scream Texture";
+    string widget_type = "check";
+> = false;
+
+uniform float scream_threshold<
+    string label = "Scream Threshold";
+    string widget_type = "slider";
+    float minimum = 0.0;
+    float maximum = 1.0;
+    float step = 0.01;
+> = 0.75;
+
 uniform texture2d blink_texture;
 uniform texture2d talk_texture;
+uniform texture2d scream_texture;
 
 float rand(float2 co){
   return frac(sin(dot(co.xy,float2(12.9898,78.233))) * 43758.5453);
@@ -102,7 +116,11 @@ float4 mainImage(VertData v_in) : TARGET
     }
     else if( audio_magnitude > full_threshold )
     {
-        if( swap_on_talk )
+        if( swap_on_scream && audio_magnitude > scream_threshold )
+        {
+            col = scream_texture.Sample(textureSampler, uv);
+        }
+        else if( swap_on_talk )
         {
             col = talk_texture.Sample(textureSampler, uv);
         }
@@ -110,13 +128,16 @@ float4 mainImage(VertData v_in) : TARGET
         {
             col = image.Sample(textureSampler, uv);
         }
-        
     }
     else
     {
         I = lerp(min_intensity,full_threshold,(audio_magnitude-threshold)*(1.0/(full_threshold-min_intensity)));
 
-        if( swap_on_talk )
+        if( swap_on_scream && audio_magnitude > scream_threshold )
+        {
+            col = scream_texture.Sample(textureSampler, uv);
+        }
+        else if( swap_on_talk )
         {
             col = lerp(baseCol,talk_texture.Sample(textureSampler, uv),I);
         }
