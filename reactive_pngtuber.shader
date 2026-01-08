@@ -76,9 +76,32 @@ uniform float scream_threshold<
     float step = 0.01;
 > = 0.75;
 
+uniform bool shake<
+    string label = "Shake?";
+    string widget_type = "check";
+> = false;
+
+uniform float shake_scalar<
+    string label = "Shake Frequency";
+    string widget_type = "slider";
+    float minimum = 0.0;
+    float maximum = 100.0;
+    float step = 0.01;
+> = 42.0;
+
+uniform float shake_amount<
+    string label = "Shake Amount";
+    string widget_type = "slider";
+    float minimum = 0.0;
+    float maximum = 0.1;
+    float step = 0.001;
+> = 0.01;
+
 uniform texture2d blink_texture;
 uniform texture2d talk_texture;
 uniform texture2d scream_texture;
+
+#define PI 3.14159265
 
 float rand(float2 co){
     return frac(sin(dot(co.xy,float2(12.9898,78.233))) * 43758.5453);
@@ -118,6 +141,7 @@ float4 mainImage(VertData v_in) : TARGET
     {
         if( swap_on_scream && audio_magnitude > scream_threshold )
         {
+            if( shake ) uv.x += shake_amount*cos( elapsed_time_active*shake_scalar);
             col = scream_texture.Sample(textureSampler, uv);
         }
         else if( swap_on_talk )
@@ -135,6 +159,7 @@ float4 mainImage(VertData v_in) : TARGET
 
         if( swap_on_scream && audio_magnitude > scream_threshold )
         {
+            if( shake ) uv.x += shake_amount*cos( elapsed_time_active*shake_scalar);
             col = scream_texture.Sample(textureSampler, uv);
         }
         else if( swap_on_talk )

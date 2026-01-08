@@ -3,10 +3,11 @@ Creates a PNGTuber on an image source in OBS Studio using obs-shaderfilter
 
 ## Features
 - fades brightness with audio (adjustable)
-- swap to talk texture (optional)
-- swap to blink texture an interval (optional)
-- swap to scream texture (optional)
-- squishes with volume (optional)
+- swap to talk texture
+- swap to blink texture an interval
+- swap to scream texture
+- shake on scream
+- squishes with volume
 
 ## How to use
 - Install obs-shaderfilter 2.6.0+ (https://github.com/exeldro/obs-shaderfilter/releases)
@@ -34,27 +35,39 @@ Full Activation Threshold - The value of the audio magnitude to image will be at
 
 Inactive Brightness - The intensity (brightness) of the image when unactive
 
-Swap to Talk Texture (Checkbox) - Whether to swap to a talk texture (image or OBS source) when activated
+Swap to Talk Texture (Checkbox) - Whether to swap to a talk texture when activated
 
-Blink? (Checkbox) - Whether to swap to a blink texture (image or OBS source) on a blink interval
+
+Blink? (Checkbox) - Whether to swap to a blink texture on a blink interval
 
 Blink Frequency - How often the blink texture will appear (in seconds)
 
 Blink Duration - How long the blink texture will appear per interval
 
+
 Squish? (Checkbox) - Whether to squish the image with proportional to the audio magnitude
 
 Maximum Squish Amount - The percentage of source height to squish on audio magnitude
 
-Swap to Scream Texture (Checkbox) - Whether to swap to a scream texture (image or OBS source) when past the scream threshold
+
+Swap to Scream Texture (Checkbox) - Whether to swap to a scream texture when past the scream threshold
 
 Scream Threshold - The value of audio magnitude to swap to the scream texture
+
+
+Shake? - Whether to shake back and forth when screaming
+
+Shake Frequency - Scale factor that increases shaking frequency
+
+Shake Amount - Scale factor that increases shaking amplitude 
+
 
 blink texture - obs source or image file to use for the blink texture
 
 talk texture - obs source or image file to user for the talk texture
 
 scream texture - obs source or image file to user for the scream texture
+
 
 ## Free to Use
 
